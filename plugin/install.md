@@ -23,23 +23,9 @@ No API tokens in `.env` for either path when using official Cursor plugins.
 
 ## 2. Daily Work Loop plugin
 
-1. Install this repo as a Cursor plugin (marketplace, team marketplace, or local dev — below).
+1. Install this repo as a Cursor plugin (path or marketplace).
 2. Confirm [.cursor-plugin/plugin.json](../.cursor-plugin/plugin.json) loads skills, commands, hooks, rules, and **mcp.json** (`daily-loop-tools` server).
 3. **Node.js 18+** required for bundled MCP tools (auto `npm install` on first run in `scripts/daily-loop-mcp/`).
-
-### Local dev install (this machine)
-
-Cursor loads plugins from `~/.cursor/plugins/local/<name>/` after **Developer: Reload Window**. Symlinks that point **outside** that folder are ignored — copy or clone the repo into the folder instead.
-
-```bash
-PLUGIN=~/.cursor/plugins/local/daily-work-loop-copilot
-rsync -a --delete --exclude '.git/' --exclude 'scripts/daily-loop-mcp/node_modules/' /path/to/daily-work-loop-copilot/ "$PLUGIN/"
-(cd "$PLUGIN/scripts/daily-loop-mcp" && npm install --omit=dev)
-```
-
-Then **Customize → Plugins**: enable **daily-work-loop-copilot** (user or workspace scope). Teams/Enterprise may require **Allow Local Plugin Imports** in Dashboard → Security.
-
-Origin-hosted copy: `git clone https://origin.cursor.com/integrant/daily-work-loop-copilot.git "$PLUGIN"` (requires `origin auth login`).
 
 ## 3. Configure
 
@@ -72,21 +58,6 @@ Optional: [`.env.example`](../.env.example) → `.env` — [config/env.md](../co
 ## Verify hooks
 
 Settings → Hooks — no schema errors. Write gate: [hooks/jira-write-gate.md](../hooks/jira-write-gate.md).
-
-## Can't see the plugin in Customize?
-
-Cursor logs may show `userLocal=false` — your team has **local plugin imports turned off** (Dashboard → **Security & Identity** → **Allow Local Plugin Imports**). Copying files to `~/.cursor/plugins/local/` will not help until an admin enables that, or you use another install path.
-
-**Recommended (Integrant / team):**
-
-1. [cursor.com/dashboard](https://cursor.com/dashboard) → **Plugins & MCPs** → **Team Marketplaces** → **Add marketplace** → **Import from repo**.
-2. URL: `https://origin.cursor.com/integrant/daily-work-loop-copilot.git` (or your public GitHub mirror).
-3. Add **daily-work-loop-copilot** to the marketplace, set **Default Off** or **Default On**, save.
-4. In the IDE: **Customize → Plugins** → your team marketplace → **Install**.
-
-Requires `origin auth login` (or GitHub access) if the repo is private.
-
-**Developing in this repo only:** [`.cursor/`](../.cursor/) symlinks MCP, commands, skills, and hooks so `/start-day` and **daily-loop-tools** work without the plugin UI. Reload the window after clone.
 
 ## Next step
 

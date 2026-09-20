@@ -1,0 +1,12 @@
+.env
+.env.local
+.env.*.local
+!.env.example
+*.pem
+*.key
+credentials.json
+node_modules/
+scripts/daily-loop-mcp/node_modules/
+.DS_Store
+.idea/
+.vscode/

@@ -13,7 +13,7 @@ Set **`INTEGRATION_STACK`** in plugin Configure. See [mcp/integration-stacks.md]
 
 ## Install
 
-1. Install **daily-work-loop-copilot** in Cursor (team marketplace, [GitHub](https://github.com/Mohamed-Hamed_intdev/daily-work-loop-copilot), or local dev — [plugin/install.md](./plugin/install.md)).
+1. Install **daily-work-loop-copilot** in Cursor.
 2. Set **`INTEGRATION_STACK`** and install the matching plugin:
    - `atlassian` → **Atlassian** plugin → Sign in
    - `github` → **GitHub** plugin → Sign in / connect MCP

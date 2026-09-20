@@ -1,0 +1,66 @@
+{
+  "name": "daily-work-loop-copilot",
+  "version": "0.3.0",
+  "description": "Daily engineering loop with Task subagents, MCP command tools, Jira+Bitbucket or GitHub Issues+PRs, and status reports.",
+  "keywords": ["daily-loop", "jira", "bitbucket", "github", "mcp", "subagent", "productivity", "handoff"],
+  "hooks": "./hooks/hooks.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "INTEGRATION_STACK": {
+        "type": "string",
+        "title": "Integration stack",
+        "description": "Primary MCP stack: atlassian (Jira + Bitbucket) or github (Issues + PRs).",
+        "default": "atlassian",
+        "enum": ["atlassian", "github"]
+      },
+      "JIRA_PROJECT_KEYS": {
+        "type": "string",
+        "title": "Jira project keys",
+        "description": "Comma-separated Jira project keys for queue and JQL (e.g. PROJ,ENG)."
+      },
+      "BITBUCKET_WORKSPACE": {
+        "type": "string",
+        "title": "Bitbucket workspace",
+        "description": "Bitbucket Cloud workspace slug for PR and pipeline queries."
+      },
+      "BITBUCKET_REPO_SLUG": {
+        "type": "string",
+        "title": "Default repo slug",
+        "description": "Optional default repository slug when the workspace has many repos."
+      },
+      "STALE_REVIEW_DAYS": {
+        "type": "string",
+        "title": "Stale review threshold (days)",
+        "description": "Warn when your review or owned PR attention exceeds this many days.",
+        "default": "2"
+      },
+      "JIRA_KEY_PATTERN": {
+        "type": "string",
+        "title": "Jira issue key regex",
+        "description": "Pattern to detect linked work in branches, commits, and PR titles.",
+        "default": "[A-Z][A-Z0-9]+-\\d+"
+      },
+      "ATLASSIAN_SITE_URL": {
+        "type": "string",
+        "title": "Atlassian site URL",
+        "description": "Optional. e.g. https://your-org.atlassian.net for links in queue output."
+      },
+      "GITHUB_OWNER": {
+        "type": "string",
+        "title": "GitHub owner",
+        "description": "Org or user slug when INTEGRATION_STACK=github."
+      },
+      "GITHUB_REPO": {
+        "type": "string",
+        "title": "GitHub repository",
+        "description": "Repository name when INTEGRATION_STACK=github."
+      },
+      "GITHUB_ISSUE_LINK_PATTERN": {
+        "type": "string",
+        "title": "GitHub issue link pattern",
+        "description": "Optional regex; default matches #123 and Fixes #123 in commits/PRs."
+      }
+    }
+  }
+}
