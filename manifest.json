@@ -1,0 +1,7 @@
+{
+  "name": "daily-work-loop-copilot",
+  "version": "0.1.0",
+  "description": "Deprecated: use .cursor-plugin/plugin.json for Cursor Plugin installs.",
+  "status": "deprecated",
+  "_note": "Agent Plugins may use a root plugin.json later; Cursor Plugins use .cursor-plugin/plugin.json."
+}

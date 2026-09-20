@@ -1,0 +1,14 @@
+---
+description: Draft-only work-item writes; explicit approval for Atlassian or GitHub MCP mutations; no auto-close or auto-merge.
+alwaysApply: true
+---
+
+# Daily loop write safety
+
+- **Default:** All Jira, GitHub Issue, and PR changes proposed as **drafts in chat**.
+- **MCP writes** (Jira/Bitbucket via Atlassian, or GitHub Issues/PRs) allowed only when:
+  1. The user message includes **`APPROVE_WORK_ITEM_WRITE`**, **`APPROVE_JIRA_WRITE`**, or **`APPROVE_GITHUB_WRITE`**, and
+  2. The workspace contains **`.cursor/daily-loop-write-approved`** (remove after use), and
+  3. The `beforeMCPExecution` write gate allows the call.
+- **Never** auto-close issues, auto-merge PRs, or approve reviews without explicit human action in the product UI.
+- Prefer `/eod-wrap --update-tickets draft` unless the user explicitly requests approved posting.

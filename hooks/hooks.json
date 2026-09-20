@@ -1,0 +1,44 @@
+{
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "prompt",
+        "prompt": "Daily Work Loop Copilot is installed. If the user runs /start-day, /my-queue, /next-task, /eod-wrap, or /handoff, load skills/daily-work-loop/SKILL.md and follow plugin commands. Otherwise respond ok with no user message.",
+        "timeout": 8
+      },
+      {
+        "type": "prompt",
+        "prompt": "Stale attention check (Daily Work Loop): Using $ARGUMENTS, if the user has Bitbucket PR reviews waiting on them or failing CI on their PRs beyond STALE_REVIEW_DAYS (default 2), warn briefly with links to /my-queue --filter=blocked. If unknown, ok silently.",
+        "timeout": 12
+      }
+    ],
+    "beforeMCPExecution": [
+      {
+        "command": "./hooks/scripts/jira-write-gate.sh",
+        "timeout": 10,
+        "failClosed": true
+      }
+    ],
+    "afterShellExecution": [
+      {
+        "command": "./hooks/scripts/check-unlinked-commit.sh",
+        "matcher": "git commit",
+        "timeout": 15
+      }
+    ],
+    "beforeSubmitPrompt": [
+      {
+        "type": "prompt",
+        "prompt": "EOD nudge (Daily Work Loop): From $ARGUMENTS, if the user message suggests ending the work day (e.g. 'done for today', 'logging off', 'EOD') but does not mention eod-wrap or /eod-wrap, return ok:false with reason suggesting they run /eod-wrap for draft Jira updates. Otherwise ok:true.",
+        "timeout": 10
+      }
+    ],
+    "sessionEnd": [
+      {
+        "type": "prompt",
+        "prompt": "Open loop reminder (Daily Work Loop): Session is ending ($ARGUMENTS). If there was likely code activity today, remind the user once to run /eod-wrap before closing if they have not captured open loops. Keep message one sentence. This is advisory only.",
+        "timeout": 10
+      }
+    ]
+  }
+}

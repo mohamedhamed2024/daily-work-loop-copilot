@@ -1,0 +1,11 @@
+---
+description: PR review SLA aligned with stale-attention hook and queue ranking.
+alwaysApply: false
+---
+
+# PR review SLA
+
+- Treat PR reviews waiting on **you** longer than `STALE_REVIEW_DAYS` (default **2** calendar days) as stale.
+- Failing CI on **your** open PRs is same-day priority; do not let it sit while starting unrelated work without reason.
+- Use `/my-queue --filter=blocked` to surface stale reviews and CI failures.
+- Ranking weights live in `config/queue-ranking.yaml`.

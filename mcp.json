@@ -1,0 +1,12 @@
+{
+  "_comment": "Stack data: Atlassian and/or GitHub official plugins. daily-loop-tools: plugin command/subagent MCP (read-only markdown).",
+  "mcpServers": {
+    "daily-loop-tools": {
+      "command": "bash",
+      "args": ["${CURSOR_PLUGIN_ROOT}/scripts/daily-loop-mcp/run.sh"],
+      "env": {
+        "DAILY_LOOP_PLUGIN_ROOT": "${CURSOR_PLUGIN_ROOT}"
+      }
+    }
+  }
+}

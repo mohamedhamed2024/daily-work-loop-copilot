@@ -1,0 +1,24 @@
+---
+description: Link commits and PRs to work items — Jira keys (Atlassian stack) or GitHub issue refs (GitHub stack).
+alwaysApply: false
+---
+
+# Work item linking
+
+Read **`INTEGRATION_STACK`** from plugin Configure (default `atlassian`).
+
+## Atlassian stack
+
+- Include a **Jira issue key** in branch name, commit message, or PR title (e.g. `PROJ-123`).
+- Pattern: `JIRA_KEY_PATTERN` (default `[A-Z][A-Z0-9]+-\d+`).
+- Scope to `JIRA_PROJECT_KEYS` when validating.
+
+## GitHub stack
+
+- Reference **GitHub Issues** in commits or PRs: `#123`, `Fixes #123`, `Closes #123`, or `owner/repo#123`.
+- Optional: `GITHUB_ISSUE_LINK_PATTERN` in plugin Configure.
+
+## All stacks
+
+- Commits or PRs without a detectable link trigger the **unlinked work** hook.
+- Do not invent issue numbers or keys; use MCP or git/PR text only.

@@ -1,0 +1,53 @@
+# Queue ranking configuration
+# Scores are additive; higher total rank = higher priority in the daily queue.
+# Tune weights per team; keep changes in version control.
+
+version: 1
+
+weights:
+  jira_priority:
+    highest: 100
+    high: 75
+    medium: 40
+    low: 15
+    lowest: 5
+  jira_status_blocked: 90
+  jira_due_today: 80
+  jira_due_overdue: 95
+  jira_assigned_to_me: 30
+  pr_failing_ci: 85
+  pr_review_requested_on_me: 70
+  pr_authored_waiting_review: 50
+  pr_stale_review_days_multiplier: 10  # per day over STALE_REVIEW_DAYS
+  blocks_my_jira_issue: 100
+  user_focus_issue: 200  # --focus=PROJ-123
+
+tie_breakers:
+  - due_date_asc
+  - updated_at_desc
+  - key_asc
+
+filters:
+  blocked:
+    include_if:
+      - jira_status_is_blocked
+      - pr_ci_failing
+      - pr_has_unresolved_review_threads
+  in_progress:
+    include_if:
+      - jira_status_in_progress
+      - pr_open_authored_by_me
+
+item_types:
+  - jira_issue
+  - bitbucket_pr
+  - github_issue
+  - github_pr
+  - review_request
+  - ci_failure
+  - blocker
+
+confidence:
+  high: "All primary sources returned data (work items + PRs + local git) for the active stack."
+  medium: "One source missing or partial; queue may be incomplete."
+  low: "MCP not authenticated or errors; use local git only."

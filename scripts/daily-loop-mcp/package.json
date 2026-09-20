@@ -1,0 +1,8 @@
+{
+  "name": "daily-loop-mcp",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.0"
+  }
+}

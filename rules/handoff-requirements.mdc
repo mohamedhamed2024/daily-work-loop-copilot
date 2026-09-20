@@ -1,0 +1,16 @@
+---
+description: Required sections and verification for PTO handoff documents.
+alwaysApply: false
+---
+
+# Handoff requirements
+
+Before PTO, run `/handoff` with your absence dates. Document must include:
+
+1. **Coverage** — who backs up which areas.
+2. **Open PRs** — status, risk, action for cover.
+3. **Jira in flight** — keys and expected outcomes.
+4. **Risks and escalations** — names and when to escalate.
+5. **Open loops** — owner, next step, date on every row.
+
+Verification agent must **PASS** before calling the pack “handoff ready.”

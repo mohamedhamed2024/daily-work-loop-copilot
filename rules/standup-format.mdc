@@ -1,0 +1,14 @@
+---
+description: Optional standup draft structure for /start-day --standup.
+alwaysApply: false
+---
+
+# Standup format
+
+When drafting standup from `/start-day --standup`:
+
+- **Yesterday:** Shipped merges, reviews completed, or meaningful progress (with Jira keys).
+- **Today:** Top 1–3 items from ranked queue with links.
+- **Blockers:** People or systems blocking progress; name who can unblock.
+
+Keep each bullet one line. No status changes in Jira from standup draft alone.

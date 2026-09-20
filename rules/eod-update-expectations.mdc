@@ -1,0 +1,11 @@
+---
+description: End-of-day expectations for Jira updates when code or PR activity occurred.
+alwaysApply: false
+---
+
+# EOD update expectations
+
+- If you **committed** or **updated PRs** today, run `/eod-wrap` before stopping work.
+- Same-day Jira touch: at minimum a **comment draft** on each key referenced in commits/PRs (posted only after approval).
+- Open loops must have **owner**, **next step**, and **date** before verification passes.
+- Do not mark Jira Done in MVP unless the user explicitly requests and approves a transition write.
