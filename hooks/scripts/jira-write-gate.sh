@@ -22,11 +22,11 @@ is_atlassian = "atlassian" in server or "atlassian.com" in url
 is_github = "github" in server or "github.com" in url
 
 atlassian_write = re.compile(
-    r"(comment|create|update|edit|transition|delete|add|post|merge|approve|decline|assign)",
+    r"(comment|create|update|edit|transition|delete|merge|approve|decline|assign)",
     re.I,
 )
 github_write = re.compile(
-    r"(issue_write|add_issue_comment|create_issue|update_issue|merge_pull|pull_request_review_write|push_files|create_or_update_file|delete_file)",
+    r"(issue_write|sub_issue_write|add_issue_comment|add_comment_to_pending_review|add_reply_to_pull_request_comment|merge_pull_request|pull_request_review_write|push_files|create_or_update_file|create_pull_request|create_branch|create_repository|delete_file|fork_repository|update_issue_comment|update_pull_request|request_copilot_review)",
     re.I,
 )
 
@@ -44,8 +44,8 @@ if needs_gate:
     if not approved:
         print(json.dumps({
             "permission": "deny",
-            "user_message": "Daily Work Loop: work-item/PR write blocked. Say APPROVE_WORK_ITEM_WRITE (or APPROVE_JIRA_WRITE / APPROVE_GITHUB_WRITE) and create .cursor/daily-loop-write-approved, or post manually.",
-            "agent_message": "Do not call this MCP write tool. Produce a draft in chat unless the user approved writes and the approval file exists in the workspace .cursor/ folder."
+            "user_message": "Daily Work Loop: work-item/PR write blocked. The hook allows this call only when .cursor/daily-loop-write-approved exists. Say APPROVE_WORK_ITEM_WRITE (or APPROVE_JIRA_WRITE / APPROVE_GITHUB_WRITE) to create that file and post, or post manually.",
+            "agent_message": "Do not call this MCP write tool. The write gate checks .cursor/daily-loop-write-approved only. Produce a draft in chat unless the user sent APPROVE_WORK_ITEM_WRITE (or APPROVE_JIRA_WRITE / APPROVE_GITHUB_WRITE) and that approval file exists."
         }))
         sys.exit(0)
 

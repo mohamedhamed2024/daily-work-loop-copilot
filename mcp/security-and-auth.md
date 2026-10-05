@@ -33,7 +33,7 @@ Read-only plugin server ([daily-loop-tools.md](./daily-loop-tools.md)) — comma
 | Issue comment / update / create | **Blocked** without approval |
 | PR merge / approve | **Never** automated |
 
-Approval: user says **`APPROVE_WORK_ITEM_WRITE`** (or `APPROVE_JIRA_WRITE` / `APPROVE_GITHUB_WRITE`) and `.cursor/daily-loop-write-approved` in the app repo.
+Approval phrases (`APPROVE_WORK_ITEM_WRITE`, `APPROVE_JIRA_WRITE`, `APPROVE_GITHUB_WRITE`) tell the agent to create `.cursor/daily-loop-write-approved` and post. The hook allows the MCP call only while that file exists. Remove it after the post.
 
 ## Enforcement
 

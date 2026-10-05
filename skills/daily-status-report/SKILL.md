@@ -18,9 +18,8 @@ Complements personal **daily loop** commands with a **team/project** snapshot su
 
 ## Workflow
 
-1. **Exploration subagent** — queue + completed/updated issues in period (default: last 24h or `--days=7`).
-2. **Execution subagent** — format report (template below).
-3. **Verification subagent** — confirm period, project scope, and no fabricated keys.
+1. **`daily-loop-exploration`** — queue + completed/updated issues in period (default: last 24h or `--days`).
+2. **`daily-loop-execution`** — format report (template below). The parent checks that the period, project scope, and issue keys match exploration output.
 
 ## Arguments
 
@@ -29,6 +28,17 @@ Complements personal **daily loop** commands with a **team/project** snapshot su
 | `--days=N` | `1` | Reporting window |
 | `--audience=team` | team | `team`, `lead`, `executive` |
 | `--confluence` | off | Atlassian only; ask before publish |
+| `--publish=html` | off | Render static HTML to `DAILY_REPORT_HTML_PATH` for GitHub Pages (includes **Last synced**) |
+
+## GitHub Pages HTML
+
+When `--publish=html`:
+
+1. Map exploration + execution output to JSON ([reference/report-json-schema.md](./reference/report-json-schema.md)).
+2. Run `scripts/render-daily-report-html/render.mjs` → `DAILY_REPORT_HTML_PATH` (default `docs/index.html`).
+3. Page header shows **Last synced** from `syncedAt`; `<meta name="daily-loop-last-sync">` in HTML for tooling.
+
+Setup and daily git workflow: [plugin/github-pages-daily-report.md](../../plugin/github-pages-daily-report.md).
 
 ## Atlassian + Confluence
 

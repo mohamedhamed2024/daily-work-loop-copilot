@@ -1,7 +1,7 @@
 {
   "name": "daily-work-loop-copilot",
-  "version": "0.3.0",
-  "description": "Daily engineering loop with Task subagents, MCP command tools, Jira+Bitbucket or GitHub Issues+PRs, and status reports.",
+  "version": "0.3.1",
+  "description": "Daily engineering loop: Gather/Draft subagents, parent Check on EOD/handoff, guardrails, GitHub or Jira stack, status reports.",
   "keywords": ["daily-loop", "jira", "bitbucket", "github", "mcp", "subagent", "productivity", "handoff"],
   "hooks": "./hooks/hooks.json",
   "variables": {
@@ -60,6 +60,12 @@
         "type": "string",
         "title": "GitHub issue link pattern",
         "description": "Optional regex; default matches #123 and Fixes #123 in commits/PRs."
+      },
+      "DAILY_REPORT_HTML_PATH": {
+        "type": "string",
+        "title": "Daily report HTML path",
+        "description": "Relative path in your app repo for GitHub Pages output (e.g. docs/index.html). Used with /daily-status-report --publish=html.",
+        "default": "docs/index.html"
       }
     }
   }

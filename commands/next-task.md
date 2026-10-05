@@ -14,23 +14,23 @@ Pick one next action from the ranked queue.
 3. Stack data skill per `INTEGRATION_STACK`
 4. `agents/subagent-orchestration.md`
 
-## Subagents (required)
+## Subagents
 
-**Task exploration** → **Task execution**.
+**`daily-loop-exploration`**. The parent writes the next-task card. Do not launch execution.
 
 ## Arguments
 
 | Arg | Default | Description |
 |-----|---------|-------------|
-| `--focus=KEY` | none | Prefer/boost matching Jira key |
+| `--focus=KEY` | none | Prefer or boost a Jira key or GitHub issue |
 | `--skip-reviews` | off | Deprioritize review_request items |
 
 ## Steps
 
-1. **Exploration** subagent → ranked queue.
-2. Select rank #1 actionable item per ranking skill rules; honor `--focus` and `--skip-reviews`.
-3. **Execution** subagent → next-task template with **Because** citing score signals.
-4. Include links to Jira and Bitbucket from MCP responses.
+1. **`daily-loop-exploration`** → ranked queue.
+2. Select rank #1 actionable item per the ranking skill; honor `--focus` and `--skip-reviews`.
+3. Parent fills the next-task template. **Because** cites score signals.
+4. Include work-item and PR links from the exploration result.
 
 ## Safety
 
@@ -46,4 +46,4 @@ Read-only MCP.
 
 ## Override
 
-If user says “actually do X instead”, accept override without re-ranking entire queue.
+If the user says to do something else, accept the override without re-ranking the entire queue.

@@ -1,8 +1,7 @@
 ---
 name: daily-handoff
 description: >-
-  Builds a verifiable PTO or absence handoff from open PRs, Jira work, risks, contacts,
-  and open loops. Use for /handoff and verification agent handoff-ready checks.
+  Builds a verifiable PTO or absence handoff from open PRs, in-flight work items, risks, contacts, and open loops. Use for /handoff and parent Check handoff-ready rules.
 ---
 
 # Daily handoff
@@ -20,24 +19,24 @@ Default date range: ask user if missing.
 
 1. **Coverage** — Who covers which areas/repos; timezone notes if relevant.
 2. **Open PRs** — Table: PR, status, risk, action for cover.
-3. **Jira in flight** — Keys, status, what “done” looks like.
+3. **Work in flight** — Jira keys or GitHub issues, status, and what “done” looks like.
 4. **Risks and escalations** — Who to ping and when.
-5. **Open loops** — Same table as EOD; must be complete for verification pass.
+5. **Open loops** — Same table as EOD; must be complete for Check pass.
 6. **Verification checklist** — Copy from template; mark pass/fail.
 
 Template: [../daily-work-loop/reference/output-templates.md](../daily-work-loop/reference/output-templates.md).
 
 ## Data sources
 
-Use `jira-bitbucket-daily-data` skill + exploration agent for full open PR/Jira set (not only today’s activity).
+Use the stack data skill (`jira-bitbucket-daily-data` or `github-daily-data`) and `daily-loop-exploration` for the full open PR and work-item set (not only today’s activity).
 
-## Verification (handoff ready)
+## Check (handoff ready)
 
-Fail verification if:
+Parent Check fails if:
 
-- Any open loop lacks owner or date
+- Any open loop lacks owner, next step, or date
 - Open PR with failing CI has no documented mitigation
-- No escalation contact for high-priority blocked Jira
+- No escalation contact for a high-priority blocked work item
 
 Pass: emit “Handoff ready” with checklist all checked or explicit user waivers.
 

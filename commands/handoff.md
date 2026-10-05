@@ -1,6 +1,6 @@
 ---
 name: handoff
-description: Generate a PTO or absence handoff pack with open PRs, Jira, risks, contacts, and verification.
+description: Generate a PTO or absence handoff pack with open PRs, in-flight work, risks, contacts, and verification.
 ---
 
 # `/handoff [dates]`
@@ -12,31 +12,30 @@ Structured handoff before PTO or extended absence.
 1. `skills/daily-work-loop/SKILL.md`
 2. `skills/daily-handoff/SKILL.md`
 3. Stack data skill per `INTEGRATION_STACK`
-4. Rule: `rules/handoff-requirements.mdc`
-5. `agents/subagent-orchestration.md`
+4. `agents/subagent-orchestration.md`
 
-## Subagents (required)
+## Subagents (Gather → Draft)
 
-**Task exploration** → **Task execution** → **Task verification**.
+**Gather** → **Draft**; parent **Check** per [agents/verification.md](../agents/verification.md).
 
 ## Arguments
 
 | Arg | Required | Description |
 |-----|----------|-------------|
 | Date range | Yes | `2026-09-15..2026-09-22` or natural language dates |
-| `--output=path` | No | Write markdown file only if user confirms path |
+| `--output=path` | No | Write a markdown file only if the user confirms the path |
 
 ## Steps
 
-1. Parse absence date range; ask once if missing.
-2. **Exploration** subagent → all open PRs and in-flight work items.
-3. **Execution** subagent → handoff template.
-4. **Verification** subagent → handoff ready PASS/FAIL.
-5. If FAIL, list fixes; regenerate sections after user input.
+1. Parse the absence date range; ask once if it is missing.
+2. **Gather** → all open PRs and in-flight work items.
+3. **Draft** → handoff template.
+4. **Check** (parent) → handoff ready PASS/FAIL.
+5. On FAIL, list fixes and regenerate sections after the user responds.
 
 ## Safety
 
-Informational document only. No Jira/Bitbucket mutations in this command.
+Informational document only. No work-item or PR mutations in this command.
 
 ## Examples
 
@@ -47,4 +46,4 @@ Informational document only. No Jira/Bitbucket mutations in this command.
 
 ## Verify step
 
-End with verification block from `agents/verification.md`. Do not mark “handoff ready” on FAIL.
+Parent runs Check from `agents/verification.md`. Do not mark “handoff ready” on FAIL.

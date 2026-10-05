@@ -1,5 +1,7 @@
 # Install — Daily Work Loop Copilot
 
+**Start here for demos:** [how-it-works.md](./how-it-works.md)
+
 ## Prerequisites
 
 - Cursor with Plugins support
@@ -50,15 +52,17 @@ Optional: [`.env.example`](../.env.example) → `.env` — [config/env.md](../co
    ```markdown
    ## Daily work loop
    INTEGRATION_STACK=<atlassian|github>. Commands: `/start-day`, `/my-queue`, `/next-task`, `/eod-wrap`, `/handoff`, `/daily-status-report`.
-   Uses Task subagents (exploration → execution → verification). MCP: daily-loop-tools + stack plugin.
+   Gather → Draft; parent Check on `/eod-wrap` and `/handoff`. See plugin how-it-works.md.
+   MCP: daily-loop-tools + stack plugin.
    ```
 
 3. Same MCP plugin signed in for that Cursor user.
 
 ## Verify hooks
 
-Settings → Hooks — no schema errors. Write gate: [hooks/jira-write-gate.md](../hooks/jira-write-gate.md).
+Settings → Hooks — no schema errors. Guardrails: [hooks/README.md](../hooks/README.md).
 
 ## Next step
 
-[tests/clean-install-and-e2e.md](../tests/clean-install-and-e2e.md)
+- Quick pilot: [tests/github-pilot-e2e.md](../tests/github-pilot-e2e.md)
+- Generic checklist: [tests/clean-install-and-e2e.md](../tests/clean-install-and-e2e.md)

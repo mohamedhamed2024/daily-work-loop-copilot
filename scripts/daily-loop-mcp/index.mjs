@@ -10,6 +10,8 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import fs from "fs";
 import path from "path";
+import { spawnSync } from "child_process";
+import os from "os";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -82,7 +84,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
     {
       name: "get_subagent_prompt",
       description:
-        "Build a Task subagent prompt for exploration, execution, or verification.",
+        "Build a Task prompt for Gather (exploration) or Draft (execution), or return Check checklist for parent (verification).",
       inputSchema: {
         type: "object",
         properties: {
@@ -127,7 +129,27 @@ server.setRequestHandler(ListToolsRequestSchema, async () => ({
             enum: ["atlassian", "github"],
           },
           confluence: { type: "boolean", default: false },
+          publish_html: { type: "boolean", default: false },
         },
+      },
+    },
+    {
+      name: "render_daily_report_html",
+      description:
+        "Render structured daily status JSON to a self-contained HTML file (GitHub Pages). Sets syncedAt if missing.",
+      inputSchema: {
+        type: "object",
+        properties: {
+          report: {
+            type: "object",
+            description: "Report object per skills/daily-status-report/reference/report-json-schema.md",
+          },
+          output_path: {
+            type: "string",
+            description: "Absolute path to write HTML (e.g. workspace/docs/index.html)",
+          },
+        },
+        required: ["report", "output_path"],
       },
     },
   ],
@@ -205,6 +227,15 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       prompt += `Plugin root: ${PLUGIN_ROOT}\n\n`;
       prompt += `Command: /${command}\nINTEGRATION_STACK: ${stack}\nArgs: ${extra}\n`;
 
+      if (phase === "verification") {
+        prompt +=
+          "\nThis phase is parent Check only — do NOT launch daily-loop-verification Task.\n";
+        prompt +=
+          "Apply agents/verification.md to the Draft output and append ## Verification — PASS | FAIL.\n";
+      } else {
+        prompt += `subagent_type: daily-loop-${phase}\n`;
+      }
+
       if (phase === "execution" || phase === "verification") {
         prompt += `\nExploration or draft input:\n${explorationOut}\n`;
       }
@@ -223,20 +254,27 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
       const audience = args?.audience ?? "team";
       const stack = args?.integration_stack ?? "atlassian";
       const confluence = args?.confluence ?? false;
+      const publishHtml = args?.publish_html ?? false;
 
       const plan = {
         command: "/daily-status-report",
         command_file: "commands/daily-status-report.md",
         skill: "skills/daily-status-report/SKILL.md",
-        args: `--days=${days} --audience=${audience}${confluence ? " --confluence" : ""}`,
+        report_json_schema: "skills/daily-status-report/reference/report-json-schema.md",
+        args: `--days=${days} --audience=${audience}${confluence ? " --confluence" : ""}${publishHtml ? " --publish=html" : ""}`,
         integration_stack: stack,
+        daily_report_html_path_default: "docs/index.html",
         subagents: [
           {
             phase: "exploration",
+            subagent_type: "daily-loop-exploration",
             goal: "Issues/PRs updated in window; blockers; merges",
           },
-          { phase: "execution", goal: "Formatted status report" },
-          { phase: "verification", goal: "Scope and facts check" },
+          {
+            phase: "execution",
+            subagent_type: "daily-loop-execution",
+            goal: "Formatted status report",
+          },
         ],
         stack_mcp:
           stack === "github"
@@ -246,13 +284,75 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
           ? "Also load Atlassian generate-status-report skill; draft before publish"
           : "Chat-only report unless user passes --confluence",
         mcp_tools_hint: [
-          "get_subagent_prompt(exploration|execution|verification)",
+          "get_subagent_prompt(exploration|execution)",
           "get_daily_loop_command(daily-status-report)",
+          ...(publishHtml ? ["render_daily_report_html"] : []),
         ],
+        html_publish_note: publishHtml
+          ? "Map report to JSON then render_daily_report_html or render.mjs; page shows Last synced"
+          : undefined,
       };
 
       return {
         content: [{ type: "text", text: JSON.stringify(plan, null, 2) }],
+      };
+    }
+
+    if (name === "render_daily_report_html") {
+      const report = args?.report;
+      const outputPath = args?.output_path;
+      if (!report || typeof report !== "object" || !outputPath) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: "Required: report (object), output_path (absolute path to HTML file)",
+            },
+          ],
+          isError: true,
+        };
+      }
+      const tmp = path.join(
+        os.tmpdir(),
+        `daily-loop-report-${Date.now()}.json`
+      );
+      const payload = { ...report };
+      if (!payload.syncedAt) {
+        payload.syncedAt = new Date().toISOString();
+      }
+      fs.writeFileSync(tmp, JSON.stringify(payload), "utf8");
+      const renderScript = path.join(
+        PLUGIN_ROOT,
+        "scripts/render-daily-report-html/render.mjs"
+      );
+      const run = spawnSync(
+        process.execPath,
+        [renderScript, "--input", tmp, "--output", outputPath],
+        { encoding: "utf8" }
+      );
+      try {
+        fs.unlinkSync(tmp);
+      } catch {
+        /* ignore */
+      }
+      if (run.status !== 0) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: run.stderr || run.stdout || "render failed",
+            },
+          ],
+          isError: true,
+        };
+      }
+      return {
+        content: [
+          {
+            type: "text",
+            text: run.stdout.trim() || JSON.stringify({ ok: true, path: outputPath }),
+          },
+        ],
       };
     }
 

@@ -30,6 +30,7 @@ Details: [mcp/integration-stacks.md](../mcp/integration-stacks.md).
 | `JIRA_PROJECT_KEYS`, `BITBUCKET_WORKSPACE` | `atlassian` |
 | `GITHUB_OWNER`, `GITHUB_REPO` | `github` |
 | `STALE_REVIEW_DAYS`, linking patterns | Both |
+| `DAILY_REPORT_HTML_PATH` | Optional; default `docs/index.html` — GitHub Pages output for `--publish=html` |
 | `ATLASSIAN_SITE_URL` | Optional (Atlassian links) |
 
 Set values in **Plugins → daily-work-loop-copilot → Configure** (Cursor does not auto-load `.env` for Agent).

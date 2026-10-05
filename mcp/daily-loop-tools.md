@@ -17,9 +17,10 @@ Root: `DAILY_LOOP_PLUGIN_ROOT` or `CURSOR_PLUGIN_ROOT` (set by Cursor).
 |------|---------|
 | `list_daily_loop_commands` | All slash commands + descriptions |
 | `get_daily_loop_command` | Full markdown for one command (`start-day`, `eod-wrap`, …) |
-| `get_subagent_prompt` | Ready-made Task prompt for `exploration`, `execution`, or `verification` |
+| `get_subagent_prompt` | Task prompt for Gather (`exploration`) or Draft (`execution`); `verification` returns Check checklist for parent |
 | `list_daily_loop_skills` | Skill names and paths |
 | `plan_daily_status_report` | Steps, args, and skill path for status reports |
+| `render_daily_report_html` | Write self-contained HTML with **Last synced** for GitHub Pages |
 
 ## Stack MCP (separate plugins)
 
@@ -32,10 +33,10 @@ This server does **not** replace:
 
 Typical flow:
 
-1. MCP `get_daily_loop_command` → agent loads procedure.
-2. MCP `get_subagent_prompt` → launch exploration Task.
-3. Atlassian/GitHub MCP → fetch live data.
-4. Execution / verification subagents → user-facing output.
+1. Slash command or MCP `get_daily_loop_command` → agent loads procedure.
+2. Launch `daily-loop-exploration` (MCP `get_subagent_prompt` is optional for external clients).
+3. Atlassian or GitHub MCP → fetch live data inside exploration.
+4. Parent summarizes `/my-queue` and `/next-task`. **Draft** (`daily-loop-execution`) formats `/start-day`, `/eod-wrap`, `/handoff`, and `/daily-status-report`. **Check** (parent, [agents/verification.md](../agents/verification.md)) runs after `/eod-wrap` and `/handoff` drafts only.
 
 ## Status report + Atlassian
 

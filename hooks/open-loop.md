@@ -1,6 +1,6 @@
 # Open loop hook
 
-Warn before session end if work may be left undocumented (activity without EOD capture or loops without owner/next step).
+Advisory reminder at session end to run `/eod-wrap` when the session likely included code or PR activity and the user did not already run it.
 
 ## Implementation
 
@@ -14,16 +14,18 @@ Warn before session end if work may be left undocumented (activity without EOD c
 
 ## Behavior
 
-**Warn** — advisory only; does not block session close.
+**Warn** — one sentence, advisory only. Does not block session close. Does not query Jira or GitHub.
+
+Open-loop completeness (owner, next step, and date) is checked in the parent **Check** step when you run `/eod-wrap` or `/handoff` ([verification.md](./verification.md)).
 
 ## User message
 
-> Before you go: run `/eod-wrap` to capture draft Jira updates and open loops.
+> Before you go: run `/eod-wrap` to capture draft work-item updates and open loops.
 
 ## Test cases
 
 1. Session with commits but no `/eod-wrap` → one-sentence reminder.
-2. User ran `/eod-wrap` with complete open-loop table → minimal or no reminder.
+2. User already ran `/eod-wrap` → no reminder.
 
 ## Related
 

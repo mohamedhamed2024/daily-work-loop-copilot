@@ -1,0 +1,27 @@
+---
+description: Daily Work Loop policy — drafts only, linked work, approved writes, no auto-merge or auto-close.
+alwaysApply: true
+---
+
+# Daily Work Loop policy
+
+## Drafts and writes
+
+- Default: all Jira, GitHub issue, and PR changes are **drafts in chat**.
+- MCP mutations are allowed only when **`.cursor/daily-loop-write-approved`** exists in the workspace (or `DAILY_LOOP_JIRA_WRITE_APPROVED=1` for local dev). The write gate checks the file, not the chat phrase.
+- Create that file only after the user sends **`APPROVE_WORK_ITEM_WRITE`**, **`APPROVE_JIRA_WRITE`**, or **`APPROVE_GITHUB_WRITE`**. Remove it after the approved post.
+- **Never** auto-close issues, auto-merge PRs, or approve reviews without the human in the product UI.
+- Prefer `/eod-wrap --update-tickets draft` unless the user explicitly requests approved posting.
+
+## Link work to tickets
+
+Read **`INTEGRATION_STACK`** from plugin Configure.
+
+- **GitHub:** `#123`, `Fixes #123`, `Closes #123`, or `owner/repo#123` in commits/PRs.
+- **Atlassian:** Jira key (e.g. `PROJ-123`) per `JIRA_KEY_PATTERN` and `JIRA_PROJECT_KEYS`.
+
+Unlinked commits trigger the link nudge hook. Do not invent issue numbers or keys; use MCP or git/PR text only.
+
+## Conflicts
+
+When guidance disagrees, see [precedence.md](./precedence.md). Repository **AGENTS.md** outranks command defaults.

@@ -2,12 +2,12 @@
 name: daily-loop-exploration
 description: >-
   Gathers work items, PRs, CI, and git data for the configured stack (Atlassian or GitHub);
-  builds a ranked daily queue with confidence scores. Launch as a Task subagent (generalPurpose).
+  builds a ranked daily queue with confidence scores. Launch as Task subagent daily-loop-exploration.
 ---
 
 # Exploration agent — daily loop
 
-You assemble the **unified ranked queue** for the Daily Work Loop Copilot. You do not draft standup/EOD prose or post work-item comments.
+You assemble the **unified ranked queue** for the Daily Work Loop Copilot. You do not draft standup, EOD, or status-report prose, and you do not post work-item comments.
 
 ## Required inputs
 
@@ -26,7 +26,7 @@ You assemble the **unified ranked queue** for the Daily Work Loop Copilot. You d
 5. Attach CI/check status to PR items.
 6. Local `git log --since=midnight` + branch; extract links (Jira keys or `#issue`).
 7. Apply `skills/work-queue-ranking/SKILL.md` + `config/queue-ranking.yaml`.
-8. Apply command filters (`--filter`, `--focus`).
+8. Apply command filters (`--filter`, `--focus`). Flag reviews and owned failing CI older than `STALE_REVIEW_DAYS` (default 2) so `/start-day` and `/my-queue --filter=blocked` can surface them.
 
 ## Queue output schema
 
@@ -39,5 +39,5 @@ Queue populated or errors documented; confidence assigned; unlinked list include
 ## Out of scope
 
 - Writing issue comments via MCP
-- Final next-task narrative (execution agent)
-- Handoff verification (verification agent)
+- Final next-task narrative (parent agent or Draft agent)
+- EOD/handoff Check (parent agent per verification.md)

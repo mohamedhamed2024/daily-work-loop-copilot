@@ -6,7 +6,7 @@
 
 Developer runs slash commands in Cursor Agent chat:
 
-- `/start-day`, `/my-queue`, `/next-task`, `/eod-wrap`, `/handoff`
+- `/start-day`, `/my-queue`, `/next-task`, `/eod-wrap`, `/handoff`, `/daily-status-report`
 
 ## Scope
 
@@ -19,7 +19,7 @@ Single workspace (pilot repo) plus Atlassian MCP identity of the signed-in user.
 
 ## MCP usage
 
-Read-heavy during day; writes only with `APPROVE_JIRA_WRITE` and write-gate approval file. See [mcp/atlassian-bitbucket-jira.md](../mcp/atlassian-bitbucket-jira.md).
+Read-heavy during the day. The write gate allows a mutation only when `.cursor/daily-loop-write-approved` exists. Create that file after `APPROVE_WORK_ITEM_WRITE` (or `APPROVE_JIRA_WRITE` / `APPROVE_GITHUB_WRITE`). See [mcp/security-and-auth.md](../mcp/security-and-auth.md).
 
 ## Review path
 

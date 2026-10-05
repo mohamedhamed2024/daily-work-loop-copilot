@@ -1,29 +1,32 @@
 ---
 name: daily-work-loop
 description: >-
-  Orchestrates the daily engineering loop via Task subagents (exploration,
-  execution, verification). Jira+Bitbucket or GitHub Issues+PRs. MCP tools
-  list commands and status-report plans.
+  Orchestrates the daily engineering loop: Gather and Draft Task subagents;
+  parent Check on EOD/handoff. Jira+Bitbucket or GitHub Issues+PRs.
 ---
 
 # Daily Work Loop (orchestrator)
+
+Plain language: [plugin/how-it-works.md](../../plugin/how-it-works.md).
 
 ## When to use
 
 - `/start-day`, `/my-queue`, `/next-task`, `/eod-wrap`, `/handoff`, `/daily-status-report`
 - User asks for morning planning, queue, EOD, handoff, or **daily status report**
 
-## Subagents (required)
+## Gather → Draft → Check
 
-Follow [agents/subagent-orchestration.md](../../agents/subagent-orchestration.md):
+Follow [agents/subagent-orchestration.md](../../agents/subagent-orchestration.md).
 
-1. **Task → exploration** (`agents/exploration.md`) — MCP + git data, ranked queue.
-2. **Task → execution** (`agents/execution.md`) — user-facing drafts.
-3. **Task → verification** (`agents/verification.md`) — for `eod-wrap`, `handoff`, `daily-status-report`.
+| Command | Task subagents | Parent |
+|---------|----------------|--------|
+| `/my-queue`, `/next-task` | Gather only | Summarize queue / next task |
+| `/start-day`, `/daily-status-report` | Gather → Draft | Present merged output |
+| `/eod-wrap`, `/handoff` | Gather → Draft | **Check** then present |
 
-Use `subagent_type: generalPurpose`. Parent agent merges results; do not skip exploration for full commands.
+Registered types: `daily-loop-exploration` (Gather), `daily-loop-execution` (Draft). Check uses [agents/verification.md](../../agents/verification.md) — no third Task.
 
-Optional: call MCP tool `get_subagent_prompt` from **daily-loop-tools** server to build Task prompts.
+Optional: MCP `get_subagent_prompt` on **daily-loop-tools** for external clients.
 
 ## Integration stack
 
@@ -57,16 +60,9 @@ Read-only; does not replace Atlassian/GitHub MCP.
 
 1. Read-first on stack MCP.
 2. No auto-close / auto-merge.
-3. Writes: `APPROVE_WORK_ITEM_WRITE` + `.cursor/daily-loop-write-approved`.
-4. Linking: `rules/work-item-linking.mdc`.
-
-## Flow index
-
-| Command | Subagents |
-|---------|-----------|
-| start-day, my-queue, next-task | exploration → execution |
-| eod-wrap, handoff, daily-status-report | exploration → execution → verification |
+3. Writes: user approval phrase, then `.cursor/daily-loop-write-approved` (write lock hook checks the file).
+4. Linking: [rules/daily-loop-policy.mdc](../../rules/daily-loop-policy.mdc).
 
 ## Output
 
-Templates: [reference/output-templates.md](./reference/output-templates.md). State **confidence** from exploration.
+Templates: [reference/output-templates.md](./reference/output-templates.md). State **confidence** from Gather.

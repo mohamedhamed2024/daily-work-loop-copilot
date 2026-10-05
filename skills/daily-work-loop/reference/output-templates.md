@@ -18,10 +18,12 @@ Use these structures in command responses. Replace placeholders; do not invent i
 
 **Suggested first action:** {single_action_with_links}
 
-**Optional standup draft**
-- Yesterday: …
-- Today: …
-- Blockers: …
+**Optional standup draft** (`/start-day --standup`)
+- Yesterday: shipped merges, reviews completed, or meaningful progress, with work-item links. One line.
+- Today: top 1–3 items from the ranked queue, with links. One line each.
+- Blockers: people or systems blocking progress, and who can unblock. One line.
+
+Standup text does not change Jira or GitHub issue status.
 ```
 
 ## Queue row (`/my-queue`)
@@ -60,8 +62,8 @@ Use these structures in command responses. Replace placeholders; do not invent i
 ### Blocked
 - …
 
-### Draft Jira comments (not posted)
-#### {JIRA-KEY} — {summary}
+### Draft work-item comments (not posted)
+#### {JIRA-KEY or #issue} — {summary}
 {comment_body}
 
 ### Open loops
@@ -81,8 +83,8 @@ Use these structures in command responses. Replace placeholders; do not invent i
 | PR | Status | Risk | Action for cover |
 |----|--------|------|------------------|
 
-## Jira in flight
-| Key | Status | Notes |
+## Work in flight
+| Key or issue | Status | Notes |
 
 ## Risks and escalations
 | Risk | Contact | When to escalate |
@@ -93,5 +95,5 @@ Use these structures in command responses. Replace placeholders; do not invent i
 ## Verification
 - [ ] All open loops have owner and date
 - [ ] Escalation contacts listed
-- [ ] No unapproved Jira writes pending
+- [ ] No unapproved work-item writes pending
 ```

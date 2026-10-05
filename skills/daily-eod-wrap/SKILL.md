@@ -41,12 +41,12 @@ Completed implementation for X; PR {link} open for review. CI green on latest pu
 | Value | Behavior |
 |-------|----------|
 | `draft` (default) | Show drafts in chat only |
-| `approved` | User must also send `APPROVE_JIRA_WRITE`; then MCP may post comments |
+| `approved` | User must also send `APPROVE_WORK_ITEM_WRITE` (or `APPROVE_JIRA_WRITE` / `APPROVE_GITHUB_WRITE`). The parent creates `.cursor/daily-loop-write-approved`, then MCP may post comments. Remove the file after the post. |
 
 ## Open loop rules
 
-Every loop must have **owner** (person or team) and **next step**. If unknown, list as “TBD” and fail verification until user fills in.
+Every loop must have **owner** (person or team), **next step**, and **date**. If unknown, list as “TBD” and fail **Check** until the user fills them in.
 
 ## Hook alignment
 
-**Open loop hook** fires on `sessionEnd` if there was git/PR activity today but no `/eod-wrap`-style summary captured in session (heuristic). Prefer running `/eod-wrap` before leaving.
+The **open loop** hook fires on `sessionEnd` as a one-sentence reminder when the session likely had code or PR activity and `/eod-wrap` did not run. It does not block close and does not judge loop completeness. That check happens in parent **Check** ([agents/verification.md](../../agents/verification.md)).

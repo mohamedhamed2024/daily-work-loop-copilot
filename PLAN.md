@@ -4,7 +4,7 @@
 **Complexity:** Medium  
 **Ranking:** ⭐⭐⭐⭐⭐  
 **Q3 Coverage:** **9/9 goals**  
-**Status:** MVP implemented (0.1.0) — pilot ready  
+**Status:** Current plugin **0.3.0** — Atlassian (Jira + Bitbucket) or GitHub (Issues + PRs). Six commands. Hooks: unlinked commit, write gate, session-end open-loop reminder.  
 **MVP timeline:** 2–3 weeks  
 
 ---
@@ -82,10 +82,10 @@ AI can:
 - Morning brief and optional standup draft
 - End-of-day wrap with draft ticket comments
 - PTO / absence handoff document
-- Three guardrail hooks for commonly forgotten steps
-- Five parameterized commands
-- GitHub or Azure DevOps MCP integration
-- Exploration, execution, and verification sub-agents
+- Three guardrail hooks: unlinked commits, MCP write gate, session-end `/eod-wrap` reminder
+- Six commands, including `/daily-status-report`
+- Atlassian (Jira + Bitbucket) or GitHub (Issues + PRs) MCP
+- Exploration for every command; execution for briefs and reports; parent Check for `/eod-wrap` and `/handoff`
 - Installable plugin and standardized `AGENTS.md`
 
 ---
@@ -196,7 +196,7 @@ Move long "how to start/end your day" procedures out of duplicated user rules an
 
 ### Goal 6 — MCP integration
 
-Connect safely to one system of record (GitHub or Azure DevOps):
+Connect safely to one system of record (Atlassian or GitHub):
 
 ```text
 get_my_work_items
@@ -273,10 +273,11 @@ daily-work-loop-copilot/
 │   ├── my-queue
 │   ├── next-task
 │   ├── eod-wrap
-│   └── handoff
+│   ├── handoff
+│   └── daily-status-report
 ├── hooks/
 │   ├── unlinked-work
-│   ├── stale-attention
+│   ├── jira-write-gate
 │   └── open-loop
 ├── agents/
 │   ├── exploration
@@ -285,7 +286,7 @@ daily-work-loop-copilot/
 ├── rules/
 │   └── precedence.md
 ├── mcp/
-│   ├── github-or-ado-tools
+│   ├── atlassian-or-github
 │   └── security-and-auth.md
 ├── automation/
 │   ├── cursor.md
@@ -389,7 +390,7 @@ Add clear repository entry points documenting:
 |---|---|
 | **Duration** | 2–3 weeks |
 | **Audience** | One engineering team |
-| **Integration** | Existing Git + work-item stack (GitHub or Azure DevOps) |
+| **Integration** | Atlassian (Jira + Bitbucket) or GitHub (Issues + PRs) |
 | **Write policy** | Draft-only ticket updates; human approves before post |
 | **Success criteria** | Measurable reduction in planning overhead and improved same-day ticket updates |
 
@@ -406,7 +407,7 @@ Approval to proceed with MVP on one team, measure time saved and ticket-update c
 | Wrong priority recommendations | Transparent ranking rules; human always overrides via `/next-task` |
 | Over-automation of ticket updates | Draft-only writes; explicit approval step |
 | MCP auth or permission issues | Start read-only; document scopes; security review before writes |
-| Low adoption | Keep to 5 simple commands; integrate into existing daily standup/EOD habit |
+| Low adoption | Keep to 6 commands; integrate into the existing daily standup and EOD habit |
 | Noisy hooks | Tune thresholds per team; warn before block |
 
 ---
@@ -420,7 +421,7 @@ Approval to proceed with MVP on one team, measure time saved and ticket-update c
 | **G4** Commands | start-day, my-queue, next-task, eod-wrap, handoff | Done |
 | **G5** Rules | Precedence model + cleanup | Done |
 | **G6** MCP | Atlassian Jira + Bitbucket | Done |
-| **G7** Agents | Exploration, execution, verification | Done |
+| **G7** Agents | Gather, Draft; parent Check on EOD/handoff | Done |
 | **G8** Tiers | Cursor, routine, CI, cloud agent docs | Done |
 | **G9** Plugin | `daily-work-loop-copilot` package | Done |
 | **G10** AGENTS.md | Per-repo entry points | Done |

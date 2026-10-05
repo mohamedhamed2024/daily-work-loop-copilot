@@ -1,9 +1,11 @@
 ---
-description: Link commits and PRs to work items — Jira keys (Atlassian stack) or GitHub issue refs (GitHub stack).
+description: Link commits and PRs to work items — see daily-loop-policy.mdc for canonical rules.
 alwaysApply: false
 ---
 
 # Work item linking
+
+Canonical policy: [daily-loop-policy.mdc](./daily-loop-policy.mdc).
 
 Read **`INTEGRATION_STACK`** from plugin Configure (default `atlassian`).
 
@@ -20,5 +22,5 @@ Read **`INTEGRATION_STACK`** from plugin Configure (default `atlassian`).
 
 ## All stacks
 
-- Commits or PRs without a detectable link trigger the **unlinked work** hook.
+- Commits or PRs without a detectable link trigger the **unlinked work** guardrail ([hooks/unlinked-work.md](../hooks/unlinked-work.md)).
 - Do not invent issue numbers or keys; use MCP or git/PR text only.

@@ -9,7 +9,7 @@ Set **`INTEGRATION_STACK`** in plugin Configure. See [mcp/integration-stacks.md]
 
 ## Status
 
-**0.3.0** — Task subagents + MCP command tools. See [PLAN.md](./PLAN.md).
+**0.3.1** — Gather/Draft + parent Check; guardrails and policy docs. See [PLAN.md](./PLAN.md).
 
 ## Install
 
@@ -21,7 +21,7 @@ Set **`INTEGRATION_STACK`** in plugin Configure. See [mcp/integration-stacks.md]
 4. Optional: [`.env.example`](./.env.example) → `.env` local mirror.
 5. **Node.js 18+** for bundled `daily-loop-tools` MCP.
 
-Commands run **exploration → execution → (verification)** Task subagents — [agents/subagent-orchestration.md](./agents/subagent-orchestration.md).
+Commands use **Gather → Draft** Task subagents and parent **Check** on EOD/handoff — [plugin/how-it-works.md](./plugin/how-it-works.md), [agents/subagent-orchestration.md](./agents/subagent-orchestration.md).
 
 Manifest: [.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json).
 

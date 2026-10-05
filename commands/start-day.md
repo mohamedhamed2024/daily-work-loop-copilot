@@ -1,6 +1,6 @@
 ---
 name: start-day
-description: Morning brief with blockers, top three priorities, and suggested first action from Jira and Bitbucket.
+description: Morning brief with blockers, top three priorities, and suggested first action from the configured stack.
 ---
 
 # `/start-day`
@@ -10,37 +10,35 @@ Morning planning: one brief view of meetings (if available), blockers, top prior
 ## Load
 
 1. `skills/daily-work-loop/SKILL.md`
-2. `skills/jira-bitbucket-daily-data/SKILL.md`
-3. `skills/work-queue-ranking/SKILL.md`
-4. Optional rule: `rules/standup-format.mdc`
-5. Stack data skill per `INTEGRATION_STACK` (jira-bitbucket or github)
-6. `agents/subagent-orchestration.md`
+2. `skills/work-queue-ranking/SKILL.md`
+3. Stack data skill: `skills/jira-bitbucket-daily-data/SKILL.md` when `INTEGRATION_STACK=atlassian`, otherwise `skills/github-daily-data/SKILL.md`
+4. `agents/subagent-orchestration.md`
 
-## Subagents (required)
+## Subagents
 
-1. **Task (exploration)** — `agents/exploration.md`; optional MCP `get_subagent_prompt(phase=exploration)`.
-2. **Task (execution)** — `agents/execution.md` with exploration output.
+1. **`daily-loop-exploration`**
+2. **`daily-loop-execution`** — morning brief from the exploration result
 
 ## Arguments
 
 | Arg | Default | Description |
 |-----|---------|-------------|
-| `--standup` | off | Include optional standup draft block |
-| `--focus=KEY` | none | Boost one Jira key in ranking |
+| `--standup` | off | Include standup draft from `reference/output-templates.md` |
+| `--focus=KEY` | none | Boost one work item in ranking (Jira key or GitHub issue) |
 
 ## Steps
 
-1. Launch **exploration** subagent (not inline MCP in parent only).
-2. Take top 3 from exploration result with `why_now`.
-3. Identify **blockers** from queue items with blocked signals or Jira Blocked status.
+1. Launch **`daily-loop-exploration`**.
+2. Take top 3 from the exploration result with `why_now`.
+3. Identify **blockers**, including reviews and owned failing CI older than `STALE_REVIEW_DAYS`. When those exist, point at `/my-queue --filter=blocked`.
 4. **Calendar:** optional MCP; if unavailable, state “Calendar not available”.
-5. Launch **execution** subagent for morning brief template.
-6. **Suggested first action:** highest-ranked *actionable* item (prefer unblockers: reviews blocking your Jira, failing CI on your PR).
+5. Launch **`daily-loop-execution`** for the morning brief template.
+6. **Suggested first action:** highest-ranked actionable item (prefer unblockers: reviews blocking your work, failing CI on your PR).
 
 ## Safety
 
 - Read-only MCP for this command.
-- Do not post Jira comments.
+- Do not post work-item comments.
 
 ## Example
 
